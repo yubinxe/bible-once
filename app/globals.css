@@ -1,0 +1,401 @@
+@import "tailwindcss";
+@import "pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css";
+@import "@fontsource/noto-serif-kr/400.css";
+@import "@fontsource/noto-serif-kr/600.css";
+@import "@fontsource/noto-serif-kr/700.css";
+@import "@fontsource/cormorant-garamond/latin-500.css";
+@import "@fontsource/cormorant-garamond/latin-500-italic.css";
+@import "@fontsource/cormorant-garamond/latin-600.css";
+
+/* ──────────────────────────────────────────────────────────────
+   Design Tokens — THE DAWN
+   프로젝트 제안 팔레트이며 사랑의교회 공식 컬러가 아니다.
+   ────────────────────────────────────────────────────────────── */
+@theme {
+  --color-canvas: #f7f4ee;
+  --color-paper: #fffdf9;
+  --color-navy: #1f2b3b;
+  --color-night: #141c27;
+  --color-ink: #282727;
+  --color-burgundy: #783b49;
+  --color-gold: #b59a72;
+  --color-sand: #e9ddcd;
+  --color-stone: #8d8982;
+  /* 본문 크기의 보조 텍스트용 — stone은 AA 미달이므로 작은 글씨에는 이 값을 쓴다 */
+  --color-stone-deep: #66625b;
+  --color-rule: #ddd5c8;
+
+  --font-serif: "Noto Serif KR", "Apple SD Gothic Neo", serif;
+  --font-display: "Cormorant Garamond", "Noto Serif KR", serif;
+  --font-sans: "Pretendard Variable", Pretendard, -apple-system, "Apple SD Gothic Neo", sans-serif;
+
+  --text-hero: clamp(2.25rem, 1.2rem + 4.2vw, 4.5rem);
+  --text-h1: clamp(2rem, 1.5rem + 2vw, 3rem);
+  --text-h2: clamp(1.75rem, 1.45rem + 1.1vw, 2.25rem);
+  --text-h3: clamp(1.375rem, 1.25rem + 0.5vw, 1.625rem);
+  --text-body: clamp(1rem, 0.96rem + 0.18vw, 1.0625rem);
+  --text-scripture: clamp(1.25rem, 1.1rem + 0.5vw, 1.4375rem);
+  --text-caption: 0.8125rem;
+
+  --ease-reverent: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --ease-door: cubic-bezier(0.65, 0, 0.25, 1);
+
+  --radius-hair: 2px;
+}
+
+@layer base {
+  html {
+    background: var(--color-canvas);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    scroll-behavior: smooth;
+  }
+  body {
+    background: var(--color-canvas);
+    font-size: var(--text-body);
+    line-height: 1.7;
+    word-break: keep-all;
+    overflow-wrap: break-word;
+  }
+  ::selection {
+    background: var(--color-sand);
+    color: var(--color-ink);
+  }
+  :focus-visible {
+    outline: 1.5px solid var(--color-burgundy);
+    outline-offset: 3px;
+  }
+  a {
+    text-underline-offset: 0.22em;
+    text-decoration-thickness: 1px;
+  }
+}
+
+@layer components {
+  .wrap {
+    width: 100%;
+    max-width: 1240px;
+    margin-inline: auto;
+    padding-inline: 1.25rem;
+  }
+  @media (min-width: 768px) {
+    .wrap {
+      padding-inline: 2.5rem;
+    }
+  }
+  .measure {
+    max-width: 68ch;
+  }
+
+  .eyebrow {
+    font-family: var(--font-display);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-variant-numeric: lining-nums;
+  }
+  .numeral {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-variant-numeric: lining-nums;
+    letter-spacing: 0.02em;
+  }
+  .display-ko {
+    font-family: var(--font-serif);
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    line-height: 1.32;
+  }
+  .scripture {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-size: var(--text-scripture);
+    line-height: 1.85;
+    letter-spacing: -0.005em;
+  }
+  .caption {
+    font-size: var(--text-caption);
+    line-height: 1.6;
+    color: var(--color-stone-deep);
+  }
+
+  .rule {
+    border-top: 1px solid var(--color-rule);
+  }
+  .rule-strong {
+    border-top: 1px solid var(--color-ink);
+  }
+
+  .link-quiet {
+    text-decoration: underline;
+    text-decoration-color: color-mix(in oklab, currentColor 35%, transparent);
+    transition: text-decoration-color 180ms var(--ease-reverent), color 180ms var(--ease-reverent);
+  }
+  .link-quiet:hover {
+    text-decoration-color: currentColor;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    min-height: 48px;
+    padding: 0.75rem 1.5rem;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    border-radius: var(--radius-hair);
+    transition: background-color 180ms var(--ease-reverent), color 180ms var(--ease-reverent),
+      border-color 180ms var(--ease-reverent);
+  }
+  .btn-primary {
+    background: var(--color-paper);
+    color: var(--color-navy);
+  }
+  .btn-primary:hover {
+    background: var(--color-sand);
+  }
+  .btn-ghost {
+    border: 1px solid color-mix(in oklab, var(--color-paper) 45%, transparent);
+    color: var(--color-paper);
+  }
+  .btn-ghost:hover {
+    border-color: var(--color-paper);
+  }
+  .btn-ink {
+    background: var(--color-navy);
+    color: var(--color-paper);
+  }
+  .btn-ink:hover {
+    background: var(--color-night);
+  }
+  .btn-line {
+    border: 1px solid var(--color-ink);
+    color: var(--color-ink);
+  }
+  .btn-line:hover {
+    background: var(--color-ink);
+    color: var(--color-paper);
+  }
+  .arrow {
+    transition: transform 200ms var(--ease-reverent);
+  }
+  .btn:hover .arrow,
+  a:hover > .arrow {
+    transform: translateX(4px);
+  }
+
+  /* 상태 표기 — 색이 아니라 기호와 글자로 구분하고 색은 보조로만 쓴다 */
+  .status {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.75rem;
+    letter-spacing: 0.04em;
+    color: var(--color-stone-deep);
+  }
+  .status::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 999px;
+    border: 1px solid currentColor;
+  }
+  .status[data-tone="solid"]::before {
+    background: currentColor;
+  }
+  .status[data-tone="accent"] {
+    color: var(--color-burgundy);
+  }
+  .status[data-tone="accent"]::before {
+    background: currentColor;
+  }
+
+  /* 종이 질감 — 아주 옅은 섬유 노이즈 */
+  .paper-grain {
+    background-color: var(--color-paper);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .4 0 0 0 0 .35 0 0 0 0 .3 0 0 0 .035 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+}
+
+/* ──────────────────────────────────────────────────────────────
+   Reveal — 의미 있는 전환에만, 한 번만
+   ────────────────────────────────────────────────────────────── */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.rise {
+  animation: rise 900ms var(--ease-reverent) both;
+}
+.rise-2 {
+  animation-delay: 140ms;
+}
+.rise-3 {
+  animation-delay: 280ms;
+}
+.rise-4 {
+  animation-delay: 420ms;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   Chapel Gate — 첫 입장 시 예배당 문이 열린다.
+   CSS만으로 재생되므로 JS가 없어도 콘텐츠가 가려지지 않는다.
+   ────────────────────────────────────────────────────────────── */
+.gate {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(28px, 5vh, 48px);
+  background: #0f141c;
+  animation: gate-out 900ms var(--ease-reverent) 3000ms forwards;
+}
+html[data-entered] .gate {
+  display: none;
+}
+.gate-portal {
+  position: relative;
+  height: min(62vh, 640px, calc(76vw * 640 / 420));
+  aspect-ratio: 420 / 640;
+  animation: portal-approach 1500ms var(--ease-door) 2350ms forwards;
+}
+.gate-opening {
+  position: absolute;
+  inset: 0;
+  clip-path: url(#gate-arch);
+  perspective: 1400px;
+  background: radial-gradient(120% 70% at 50% 72%, #fffdf9 0%, #f3e9da 38%, #c9b28f 100%);
+}
+.gate-leaf {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 50%;
+  background-color: #2b211b;
+  background-image:
+    linear-gradient(to bottom, transparent 22%, #1b1511 22%, #1b1511 23.2%, transparent 23.2%,
+      transparent 74%, #1b1511 74%, #1b1511 75.2%, transparent 75.2%),
+    repeating-linear-gradient(90deg, #2f241d 0 2px, #2b211b 2px 28%, #241b16 28% calc(28% + 1px));
+  backface-visibility: hidden;
+  animation-duration: 1900ms;
+  animation-timing-function: var(--ease-door);
+  animation-delay: 950ms;
+  animation-fill-mode: forwards;
+}
+.gate-leaf::after {
+  content: "";
+  position: absolute;
+  top: 52%;
+  width: 18px;
+  height: 18px;
+  border: 1.5px solid #8a7556;
+  border-radius: 999px;
+}
+.gate-leaf--l {
+  left: 0;
+  transform-origin: left center;
+  box-shadow: inset -1px 0 0 #120e0b;
+  animation-name: leaf-l;
+}
+.gate-leaf--l::after {
+  right: 14px;
+}
+.gate-leaf--r {
+  right: 0;
+  transform-origin: right center;
+  box-shadow: inset 1px 0 0 #120e0b;
+  animation-name: leaf-r;
+}
+.gate-leaf--r::after {
+  left: 14px;
+}
+.gate-frame {
+  position: absolute;
+  inset: -14px;
+  width: calc(100% + 28px);
+  height: calc(100% + 28px);
+  overflow: visible;
+  pointer-events: none;
+}
+.gate-caption {
+  text-align: center;
+  color: #e9ddcd;
+  opacity: 0;
+  animation: rise 900ms var(--ease-reverent) 200ms forwards, fade-away 500ms ease 2300ms forwards;
+}
+.gate-skip {
+  position: absolute;
+  top: max(env(safe-area-inset-top), 16px);
+  right: 16px;
+  min-height: 44px;
+  padding: 0 1rem;
+  font-size: 0.8125rem;
+  letter-spacing: 0.06em;
+  color: #b8ad9c;
+}
+.gate-skip:hover {
+  color: #f7f4ee;
+}
+@keyframes leaf-l {
+  to {
+    transform: rotateY(-108deg);
+  }
+}
+@keyframes leaf-r {
+  to {
+    transform: rotateY(108deg);
+  }
+}
+@keyframes portal-approach {
+  to {
+    transform: scale(3.2);
+    opacity: 0;
+  }
+}
+@keyframes fade-away {
+  to {
+    opacity: 0;
+  }
+}
+@keyframes gate-out {
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .gate {
+    display: none;
+  }
+  .rise {
+    animation: none;
+  }
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+}
