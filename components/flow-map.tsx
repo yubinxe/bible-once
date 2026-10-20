@@ -26,7 +26,7 @@ export function FlowMap({ visual }: { visual: Study["visual"] }) {
         {visual.nodes.map((n, i) => {
           const last = i === visual.nodes.length - 1;
           return (
-            <li key={n.verses} className="relative grid grid-cols-[3.5rem_1fr] gap-x-5 md:grid-cols-[6rem_1fr] md:gap-x-10">
+            <li key={n.verses} data-reveal style={{ ["--reveal-delay" as string]: `${Math.min(i, 4) * 90}ms` }} className="relative grid grid-cols-[3.5rem_1fr] gap-x-5 md:grid-cols-[6rem_1fr] md:gap-x-10">
               {/* spine */}
               <div className="relative flex justify-center">
                 <span

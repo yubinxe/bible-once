@@ -2,6 +2,8 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
+import { ScrollReveal } from "@/components/scroll-reveal";
+import { SmoothScroll } from "@/components/smooth-scroll";
 
 export const metadata: Metadata = {
   title: {
@@ -22,7 +24,7 @@ export const viewport: Viewport = {
 };
 
 /** 같은 세션에서 이미 입장했다면 첫 페인트 전에 문을 숨긴다 */
-const entranceScript = `try{if(sessionStorage.getItem("dawn:entered"))document.documentElement.dataset.entered="1"}catch(e){}`;
+const entranceScript = `(function(){var d=document.documentElement;d.classList.add("js");setTimeout(function(){if(!window.__revealReady)d.classList.remove("js")},3000);try{if(sessionStorage.getItem("dawn:entered"))d.dataset.entered="1"}catch(e){}})()`;
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -30,13 +32,16 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <script dangerouslySetInnerHTML={{ __html: entranceScript }} />
       </head>
-      <body className="min-h-dvh flex flex-col">
+      <body className="relative isolate min-h-dvh flex flex-col">
         <a
           href="#main"
           className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[200] focus:bg-paper focus:px-4 focus:py-2"
         >
           본문으로 건너뛰기
         </a>
+        <div aria-hidden className="celestial no-print" />
+        <SmoothScroll />
+        <ScrollReveal />
         <SiteHeader />
         <main id="main" className="flex-1">
           {children}

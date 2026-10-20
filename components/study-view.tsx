@@ -16,7 +16,7 @@ export const STUDY_TOC = [
 
 function Block({ id, n, eyebrow, title, children }: { id: string; n: string; eyebrow: string; title: string; children: React.ReactNode }) {
   return (
-    <section id={id} aria-labelledby={`${id}-h`} className="scroll-mt-28 border-t border-rule py-16 md:py-20">
+    <section id={id} data-reveal aria-labelledby={`${id}-h`} className="scroll-mt-28 border-t border-rule py-16 md:py-20">
       <p className="eyebrow text-burgundy">
         <span className="numeral mr-3 tracking-normal">{n}</span>
         {eyebrow}

@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { ChapelGate } from "@/components/chapel-gate";
 import { DawnHorizon } from "@/components/dawn-horizon";
+import { HeroAscend } from "@/components/hero-ascend";
+import { LightMotes } from "@/components/light-motes";
 import { DayTimeline } from "@/components/day-timeline";
 import { Awaiting, RStatus, SectionHead, SourceNote, TextLink, VStatus } from "@/components/ui";
 import {
@@ -28,9 +30,11 @@ export default function Home() {
       <ChapelGate />
 
       {/* ── A. Sacred Hero ───────────────────────────────────────── */}
-      <section aria-labelledby="hero-title" className="relative isolate overflow-hidden bg-night text-paper">
+      <HeroAscend labelledBy="hero-title" className="hero relative isolate overflow-hidden bg-night text-paper">
         <DawnHorizon />
-        <div className="wrap relative flex min-h-[100svh] flex-col justify-end pb-14 pt-32 md:pb-20">
+        <div aria-hidden className="hero-sunrise" />
+        <LightMotes />
+        <div className="hero-copy wrap relative flex min-h-[100svh] flex-col justify-end pb-[calc(22vh+1rem)] pt-32">
           <p className="eyebrow rise text-gold">The 24th Global Special Dawn Revival · Autumn 2026</p>
           <h1 id="hero-title" className="display-ko rise rise-2 mt-8 text-[length:var(--text-hero)] leading-[1.22] text-paper">
             새벽을 깨운 말씀,
@@ -65,7 +69,7 @@ export default function Home() {
             </p>
           </div>
         </div>
-      </section>
+      </HeroAscend>
 
       {/* ── B. Six Days of Revival ───────────────────────────────── */}
       <section aria-labelledby="journey" className="wrap pt-28 md:pt-36">
@@ -76,7 +80,7 @@ export default function Home() {
           title="여섯 날, 하나의 여정"
           lede="매일의 주제는 앞의 날 위에 쌓입니다. 오늘을 중심으로, 지나온 날과 다가올 날을 한 흐름으로 읽으십시오."
         />
-        <div className="mt-14 md:pl-[25%]">
+        <div data-reveal className="mt-14 md:pl-[25%]">
           <DayTimeline focusDate={day.date} />
           <p className="caption mt-5">
             일별 주제와 2–3일차 설교는 공식 뉴스레터 기준이며, 공식 웹 게시본과 재대조 후 상태가 갱신됩니다.
@@ -104,7 +108,7 @@ export default function Home() {
               <Awaiting>설교 정보는 공식 게시 후 열립니다. 그때까지 오늘의 주제로 기도해 주십시오.</Awaiting>
             </div>
           ) : (
-            <div className="mt-14 grid gap-px bg-rule md:ml-[25%] md:grid-cols-2">
+            <div data-reveal className="mt-14 grid gap-px bg-rule md:ml-[25%] md:grid-cols-2">
               {todays.map((s) => {
                 const sp = speakerById(s.speakerId);
                 return (
@@ -157,7 +161,7 @@ export default function Home() {
                 <span className="mr-3 numeral tracking-normal">III</span>Theological Insight
               </p>
             </div>
-            <div className="md:col-span-9">
+            <div data-reveal className="md:col-span-9">
               <p className="font-display text-[clamp(3rem,2rem+5vw,6.5rem)] font-medium italic leading-none text-gold" aria-hidden>
                 {insight.conceptEn}
               </p>
@@ -196,7 +200,7 @@ export default function Home() {
             title="말씀 앞에 머무는 네 개의 질문"
             lede="기록은 이 기기에만 저장되며 어디에도 공개되지 않습니다."
           />
-          <ol className="mt-14 grid gap-px bg-sand/15 md:ml-[25%] md:grid-cols-2">
+          <ol data-reveal className="mt-14 grid gap-px bg-sand/15 md:ml-[25%] md:grid-cols-2">
             {["오늘 깨달은 말씀", "나에게 남은 질문", "오늘의 기도", "이번 주 실천"].map((q, i) => (
               <li key={q} className="bg-navy py-7 md:px-8 md:py-10 md:odd:pl-0">
                 <span className="numeral text-gold">{String(i + 1).padStart(2, "0")}</span>
@@ -221,7 +225,7 @@ export default function Home() {
           title="원본은 언제나 공식 출처에"
           lede="공식 영상·뉴스레터·설교는 원본으로 연결합니다. 이 사이트의 해설은 원본과 분리해 표시합니다."
         />
-        <ul className="mt-14 border-t border-ink md:ml-[25%]">
+        <ul data-reveal className="mt-14 border-t border-ink md:ml-[25%]">
           {archive.slice(0, 6).map((s) => (
             <li key={s.id} className="border-b border-rule">
               <a href={s.url} target="_blank" rel="noopener" className="group grid grid-cols-[1fr_auto] items-baseline gap-4 py-5">

@@ -33,7 +33,12 @@ Sacred Minimalism · Quiet Reverence · Editorial Modernism · Architectural Res
 ## Motion
 - Hover 150–200ms · 전환 250–400ms · `--ease-reverent`.
 - Chapel Gate: 0.2s 캡션 → 0.95s 문 열림(1.9s) → 2.35s 포털 확대 → 3.0s 페이드. 순수 CSS, 세션당 1회, `prefers-reduced-motion` 시 생략.
-- 패럴랙스·바운스·스크롤 연출 없음. 읽기 화면에는 플로팅 CTA 없음, 2px 진행선만.
+- Ascent(사용자 요청, 2026-10-20): 스크롤할수록 어둠에서 빛으로 오른다.
+  - 관성 스크롤 `lenis`(lerp 0.075, 터치는 네이티브).
+  - Hero: `--ascend`(0→1)로 문구가 떠오르며 옅어지고 새벽빛이 밝아짐, 하단 22vh가 canvas로 녹아듦, 빛 입자(canvas, 화면 밖·숨김 탭에서 정지).
+  - 섹션: `[data-reveal]` — opacity·translate 28px·blur 6px → 선명(1.2–1.4s). 그리드 컨테이너 단위로만 적용.
+  - `.celestial`: 고정 배경의 옅은 빛줄기 3개, 38s/53s로 ±4° 흔들림.
+  - 모두 `prefers-reduced-motion`에서 해제. 바운스 없음. 읽기 화면에는 플로팅 CTA 없음, 2px 진행선만.
 
 ## Components
 `SectionHead` · `DayTimeline` · `FlowMap`(argument-map / thematic-progression / narrative-sequence / literary-structure) · `RecallList` · `Distinguish` · `OneSentence` · `Journal` · `VStatus`/`RStatus`(기호+글자로 상태 구분, 색은 보조).
