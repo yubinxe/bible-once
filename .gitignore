@@ -1,0 +1,12 @@
+node_modules/
+.next/
+out/
+next-env.d.ts
+*.tsbuildinfo
+.vercel
+.env*.local
+playwright-report/
+test-results/
+data/snapshots/raw/
+data/source-state.json
+data/sync-report.md
