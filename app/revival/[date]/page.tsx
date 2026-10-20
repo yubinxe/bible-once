@@ -32,7 +32,7 @@ const ROMAN = ["I", "II", "III", "IV", "V", "VI"];
 
 function Part({ n, title, children, id }: { n: number; title: string; children: React.ReactNode; id: string }) {
   return (
-    <section aria-labelledby={id} className="grid gap-8 border-t border-rule py-16 md:grid-cols-12 md:py-20">
+    <section data-reveal aria-labelledby={id} className="grid gap-8 border-t border-rule py-16 md:grid-cols-12 md:py-20">
       <div className="md:col-span-3">
         <p className="flex items-baseline gap-3">
           <span className="numeral text-stone-deep">{String(n).padStart(2, "0")}</span>

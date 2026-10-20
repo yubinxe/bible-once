@@ -6,6 +6,7 @@
 @import "@fontsource/cormorant-garamond/latin-500.css";
 @import "@fontsource/cormorant-garamond/latin-500-italic.css";
 @import "@fontsource/cormorant-garamond/latin-600.css";
+@import "lenis/dist/lenis.css";
 
 /* ──────────────────────────────────────────────────────────────
    Design Tokens — THE DAWN
@@ -377,9 +378,146 @@ html[data-entered] .gate {
   }
 }
 
+/* ──────────────────────────────────────────────────────────────
+   Ascent — 스크롤을 내릴수록 어둠에서 빛으로 오른다
+   ────────────────────────────────────────────────────────────── */
+html.lenis {
+  scroll-behavior: auto;
+}
+
+/* 페이지 진입 */
+@keyframes page-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.page-enter {
+  animation: page-in 600ms var(--ease-reverent) backwards;
+}
+/* 입장 문은 고정 레이어여야 하므로, 문이 있는 페이지에서는 전환 효과로 쌓임 맥락을 만들지 않는다 */
+.page-enter:has(.gate) {
+  animation: none;
+}
+
+/* 빛이 번지듯 드러남 — html.js 아래에서만 숨기므로 스크립트 실패 시에도 보인다 */
+html.js [data-reveal] {
+  opacity: 0;
+  transform: translate3d(0, 28px, 0);
+  filter: blur(6px);
+  transition:
+    opacity 1200ms var(--ease-reverent),
+    transform 1400ms var(--ease-reverent),
+    filter 1200ms var(--ease-reverent);
+  transition-delay: var(--reveal-delay, 0ms);
+  will-change: opacity, transform, filter;
+}
+html.js [data-reveal][data-revealed] {
+  opacity: 1;
+  transform: none;
+  filter: none;
+}
+
+/* Hero — 문구는 떠오르며 옅어지고, 수평선의 빛은 밝아진다 */
+.hero {
+  --ascend: 0;
+}
+.hero-copy {
+  transform: translate3d(0, calc(var(--ascend) * -72px), 0);
+  opacity: calc(1 - var(--ascend) * 1.15);
+}
+.hero-sunrise {
+  position: absolute;
+  left: 50%;
+  bottom: -38vh;
+  width: max(140vw, 1400px);
+  aspect-ratio: 2 / 1;
+  translate: -32% 0;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(255, 249, 236, 0.55), rgba(233, 221, 205, 0.22) 45%, rgba(181, 154, 114, 0) 100%);
+  opacity: calc(0.45 + var(--ascend) * 0.55);
+  transform: translate3d(0, calc(var(--ascend) * -14vh), 0) scale(calc(1 + var(--ascend) * 0.3));
+  pointer-events: none;
+}
+/* 어둠에서 빛의 바탕으로 녹아드는 경계 */
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 22vh;
+  background: linear-gradient(to bottom, rgba(247, 244, 238, 0), var(--color-canvas));
+  pointer-events: none;
+}
+
+/* 하늘에서 내려오는 아주 옅은 빛줄기 — 밝은 바탕 위에서만 보인다 */
+.celestial {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  overflow: hidden;
+}
+.celestial::before,
+.celestial::after {
+  content: "";
+  position: absolute;
+  top: -30vh;
+  left: 50%;
+  width: 160vw;
+  height: 150vh;
+  translate: -50% 0;
+  transform-origin: 50% 0;
+  background: conic-gradient(
+    at 50% 0%,
+    transparent 0deg 148deg,
+    rgba(214, 192, 156, 0.22) 156deg,
+    transparent 165deg 172deg,
+    rgba(214, 192, 156, 0.16) 179deg,
+    transparent 187deg 193deg,
+    rgba(214, 192, 156, 0.2) 201deg,
+    transparent 211deg 360deg
+  );
+  mask-image: linear-gradient(to bottom, #000 0%, rgba(0, 0, 0, 0.35) 55%, transparent 90%);
+  opacity: 0.9;
+  filter: blur(18px);
+  animation: beams 38s ease-in-out infinite alternate;
+}
+.celestial::after {
+  opacity: 0.6;
+  animation-duration: 53s;
+  animation-direction: alternate-reverse;
+}
+@keyframes beams {
+  from {
+    transform: rotate(-4deg);
+  }
+  to {
+    transform: rotate(4deg);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
+  }
+  html.js [data-reveal] {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+  .page-enter,
+  .celestial::before,
+  .celestial::after {
+    animation: none;
+  }
+  .hero-copy,
+  .hero-sunrise {
+    transform: none;
+    opacity: 1;
   }
   .gate {
     display: none;
