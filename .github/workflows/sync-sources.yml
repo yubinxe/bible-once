@@ -1,0 +1,53 @@
+name: Source Sync
+
+# 특새 기간(10.18–10.25) 동안 하루 두 번(KST 06:40, 12:40) 공식 공개 페이지의 변경을 감지한다.
+# 결과는 자동 게시하지 않고 보고서로만 남긴다. 관리자는 Actions 탭에서 수동 실행할 수 있다.
+on:
+  schedule:
+    - cron: "40 21 18-25 10 *"
+    - cron: "40 3 18-25 10 *"
+  workflow_dispatch:
+    inputs:
+      only:
+        description: "특정 source id만 (쉼표 구분, 비우면 전체)"
+        required: false
+        default: ""
+
+permissions:
+  contents: read
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Restore previous fingerprints
+        uses: actions/cache/restore@v4
+        with:
+          path: data/source-state.json
+          key: source-state-${{ github.run_id }}
+          restore-keys: source-state-
+      - name: Discovery → Fetch → Parse → Normalize → Validate
+        run: npm run sync:sources -- ${{ inputs.only && format('--only={0}', inputs.only) || '' }}
+        continue-on-error: true
+      - name: Save fingerprints
+        uses: actions/cache/save@v4
+        if: always()
+        with:
+          path: data/source-state.json
+          key: source-state-${{ github.run_id }}
+      - name: Report
+        if: always()
+        run: test -f data/sync-report.md && cat data/sync-report.md >> "$GITHUB_STEP_SUMMARY" || echo "보고서 없음" >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: sync-report
+          path: data/
+          retention-days: 30
