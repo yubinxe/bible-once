@@ -407,12 +407,12 @@ html.lenis {
 /* 빛이 번지듯 드러남 — html.js 아래에서만 숨기므로 스크립트 실패 시에도 보인다 */
 html.js [data-reveal] {
   opacity: 0;
-  transform: translate3d(0, 28px, 0);
-  filter: blur(6px);
+  transform: translate3d(0, 36px, 0);
+  filter: blur(8px);
   transition:
-    opacity 1200ms var(--ease-reverent),
-    transform 1400ms var(--ease-reverent),
-    filter 1200ms var(--ease-reverent);
+    opacity 1500ms var(--ease-reverent),
+    transform 1700ms var(--ease-reverent),
+    filter 1400ms var(--ease-reverent);
   transition-delay: var(--reveal-delay, 0ms);
   will-change: opacity, transform, filter;
 }

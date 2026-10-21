@@ -1,0 +1,78 @@
+name: Sermon Transcribe
+
+# 특새 기간 하루 두 번(KST 09:10, 15:10) 새로 올라온 설교 영상을 전사해 설교 노트를 만든다.
+# 검증(타입·린트·콘텐츠·빌드)을 통과한 노트만 main에 커밋한다. 전사 원문은 커밋하지 않는다.
+on:
+  schedule:
+    - cron: "10 0 19-26 10 *"
+    - cron: "10 6 19-26 10 *"
+  workflow_dispatch:
+    inputs:
+      id:
+        description: "설교 id (예: 2026-10-20-kim-barnabas). 비우면 노트 없는 설교 전부"
+        required: false
+        default: ""
+      url:
+        description: "유튜브 주소 (id를 하나만 지정할 때). 비우면 자동 검색"
+        required: false
+        default: ""
+      force:
+        description: "기존 노트 덮어쓰기·영상 검증 무시"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: transcribe
+  cancel-in-progress: false
+
+jobs:
+  transcribe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      # 최신 yt-dlp는 YouTube 처리에 외부 JS 런타임(Deno)을 쓴다
+      - uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+      - name: Install yt-dlp
+        run: python3 -m pip install --user "yt-dlp[default]==2026.8.19" && echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+      - name: Check secrets
+        run: |
+          if [ -z "$ANTHROPIC_API_KEY" ]; then
+            echo "::error::ANTHROPIC_API_KEY 시크릿이 없습니다 (Settings → Secrets and variables → Actions)."; exit 1
+          fi
+      - name: YouTube cookies (optional)
+        env:
+          YTDLP_COOKIES: ${{ secrets.YTDLP_COOKIES }}
+        run: |
+          if [ -n "$YTDLP_COOKIES" ]; then
+            printf '%s' "$YTDLP_COOKIES" > "$RUNNER_TEMP/cookies.txt"
+            echo "YTDLP_COOKIES_FILE=$RUNNER_TEMP/cookies.txt" >> "$GITHUB_ENV"
+          fi
+      - name: Transcribe and analyze
+        run: |
+          args=()
+          [ -n "${{ inputs.id }}" ] && args+=("--id=${{ inputs.id }}")
+          [ -n "${{ inputs.url }}" ] && args+=("--url=${{ inputs.url }}")
+          [ "${{ inputs.force }}" = "true" ] && args+=("--force")
+          npm run transcribe -- "${args[@]}"
+      - name: Verify
+        run: npm run typecheck && npm run lint && npm run validate:content && npm run build
+      - name: Commit notes
+        run: |
+          git add content/sermon-notes
+          if git diff --cached --quiet; then echo "새 노트 없음"; exit 0; fi
+          git -c user.name="the-dawn-bot" -c user.email="actions@users.noreply.github.com" \
+            commit -m "content: 설교 노트 자동 생성 (${{ github.run_id }})"
+          git push origin HEAD:main

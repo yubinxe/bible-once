@@ -4,6 +4,8 @@ import { notFound } from "next/navigation";
 import { FlowMap } from "@/components/flow-map";
 import { Awaiting, RStatus, SourceNote, TextLink, VStatus } from "@/components/ui";
 import { sermonById } from "@/content/sermons";
+import { sermonNotes } from "@/content/sermon-notes";
+import { NoteBadge } from "@/components/sermon-note";
 import {
   bibleUrl,
   days,
@@ -32,8 +34,8 @@ const ROMAN = ["I", "II", "III", "IV", "V", "VI"];
 
 function Part({ n, title, children, id }: { n: number; title: string; children: React.ReactNode; id: string }) {
   return (
-    <section data-reveal aria-labelledby={id} className="grid gap-8 border-t border-rule py-16 md:grid-cols-12 md:py-20">
-      <div className="md:col-span-3">
+    <section aria-labelledby={id} className="grid gap-8 border-t border-rule py-16 md:grid-cols-12 md:py-20">
+      <div data-reveal className="md:col-span-3">
         <p className="flex items-baseline gap-3">
           <span className="numeral text-stone-deep">{String(n).padStart(2, "0")}</span>
           <span id={id} className="display-ko text-[1.25rem]">
@@ -41,7 +43,7 @@ function Part({ n, title, children, id }: { n: number; title: string; children: 
           </span>
         </p>
       </div>
-      <div className="md:col-span-9">{children}</div>
+      <div data-reveal className="md:col-span-9">{children}</div>
     </section>
   );
 }
@@ -99,11 +101,11 @@ export default async function DayPage({ params }: Props) {
           {list.length === 0 ? (
             <Awaiting>설교 정보는 공식 게시 후 열립니다. 오늘의 주제 ‘{day.theme}’로 먼저 기도해 주십시오.</Awaiting>
           ) : (
-            <ol className="grid gap-px bg-rule md:grid-cols-2">
+            <ol className="grid border-t border-rule md:grid-cols-2">
               {list.map((s) => {
                 const sp = speakerById(s.speakerId);
                 return (
-                  <li key={s.id} className="flex flex-col bg-canvas pb-8 md:px-8 md:first:pl-0">
+                  <li key={s.id} className="flex flex-col border-b border-rule py-8 md:px-8 md:first:pl-0 md:odd:border-r">
                     <VStatus status={s.status} />
                     <h2 className="display-ko mt-4 text-[length:var(--text-h3)]">{s.title}</h2>
                     <p className="mt-3 text-[0.9375rem]">
@@ -111,7 +113,20 @@ export default async function DayPage({ params }: Props) {
                       {sp?.affiliation && <span className="text-stone-deep"> · {sp.affiliation}</span>}
                     </p>
                     <p className="font-serif text-burgundy">{passageLabel(s.passage)}</p>
+                    {sermonNotes[s.id] && (
+                      <div className="mt-6">
+                        <ul className="space-y-2 text-[0.9375rem] leading-7">
+                          {sermonNotes[s.id].summary.map((l) => (
+                            <li key={l}>{l}</li>
+                          ))}
+                        </ul>
+                        <div className="mt-3">
+                          <NoteBadge note={sermonNotes[s.id]} />
+                        </div>
+                      </div>
+                    )}
                     <div className="mt-6 flex flex-wrap gap-x-6 gap-y-2">
+                      {sermonNotes[s.id] && <TextLink href={`/sermons/${s.id}#notes`}>설교 노트</TextLink>}
                       {s.study && <TextLink href={`/sermons/${s.id}`}>본문 깊이 읽기</TextLink>}
                       {s.officialUrl && <TextLink href={s.officialUrl}>공식 설교</TextLink>}
                     </div>

@@ -13,7 +13,7 @@ export function DayTimeline({ focusDate, detailed = false }: { focusDate: string
         const st = dayState(day);
         const list = sermonsByDate(day.date);
         return (
-          <li key={day.date} className="border-b border-rule">
+          <li key={day.date} data-reveal className="border-b border-rule">
             <Link
               href={`/revival/${day.date}`}
               aria-current={isFocus ? "date" : undefined}

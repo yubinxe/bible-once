@@ -6,10 +6,11 @@
 - `npm run dev` / `npm run build`
 - `npm run typecheck` · `npm run lint` · `npm run validate:content` · `npm run test:e2e`
 - `npm run sync:sources [-- --only=id1,id2]` — 공식 공개 페이지 변경 감지(보고서만 생성)
+- `npm run transcribe [-- --id=… --url=… --force]` — 설교 영상 자막 → Claude 요약·인사이트(`yt-dlp`, `ANTHROPIC_API_KEY` 필요). Actions `Sermon Transcribe`가 특새 기간 하루 2회 자동 실행
 
 ## 반드시 지킬 것
 - 공식 데이터는 `content/` 에만, 출처(`sourceIds`)와 상태(`status`) 필수. 모르면 `pending` — 임의 생성 금지.
-- 설교 요약은 공식 원문 확인 + 사람 검수 후에만. 본문 연구는 ‘편집 해설’로 표시.
+- 설교 노트(`content/sermon-notes/`)는 공식 영상 자막 전사 → `npm run transcribe`로만 만든다. ‘AI 전사 요약 · 검수 전’ 표시와 원본 영상 타임스탬프 없이 게시 금지. 전사 원문은 커밋·게시 금지(`data/transcripts/` gitignore). 본문 연구는 ‘편집 해설’로 표시.
 - 해설의 `review`를 사람 검수 없이 `reviewed`로 올리지 않는다.
 - 성경 인용은 개역개정 1절 이내. 영상·뉴스레터 전문 재배포 금지.
 - 개인 묵상은 localStorage에만. 서버 전송 코드 추가 금지.

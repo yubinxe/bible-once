@@ -6,7 +6,8 @@ import { z } from "zod";
 import { days, event, speakers } from "../content/event";
 import { sermons } from "../content/sermons";
 import { sources } from "../content/sources";
-import { Day, Event, Sermon, Source, Speaker } from "../lib/schema";
+import { sermonNotes } from "../content/sermon-notes";
+import { Day, Event, Sermon, SermonNote, Source, Speaker } from "../lib/schema";
 
 const errors: string[] = [];
 const warn: string[] = [];
@@ -66,6 +67,14 @@ sermons.forEach((s) => {
   // 핵심 구절은 1절 이내
   if (s.study?.keyVerse && /[-–,]/.test(s.study.keyVerse.ref)) err(`sermon ${s.id}: keyVerse는 1절 이내여야 함`);
   if (s.study?.review === "reviewed") warn.push(`sermon ${s.id}: reviewed — 검수자 기록을 DECISIONS.md에 남겼는지 확인`);
+});
+
+Object.entries(sermonNotes).forEach(([id, n]) => {
+  parse(SermonNote, n, `note ${id}`);
+  if (n.sermonId !== id) err(`note ${id}: sermonId 불일치`);
+  if (!sermonIds.has(id)) err(`note ${id}: 알 수 없는 설교`);
+  const up = n.video.uploadDate;
+  if (up && (up < event.start || up > "2026-10-25")) err(`note ${id}: 행사 기간 밖 영상(${up}) — 다른 회차 영상 혼입 의심`);
 });
 
 warn.forEach((w) => console.warn(`⚠ ${w}`));
