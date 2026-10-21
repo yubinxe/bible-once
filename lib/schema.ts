@@ -162,3 +162,35 @@ export const Event = z.object({
   sourceIds: z.array(z.string()),
 });
 export type Event = z.infer<typeof Event>;
+
+/**
+ * 설교 노트 — 공식 설교 영상의 자막을 전사해 AI가 정리한 요약·인사이트.
+ * 전사 원문은 저장소와 사이트에 올리지 않는다(저작권). 이 노트는 원본 영상 타임스탬프와 함께만 게시한다.
+ */
+const timestamp = z.string().regex(/^\d{1,2}:\d{2}(:\d{2})?$/);
+
+export const SermonNote = z.object({
+  sermonId: z.string(),
+  review: ReviewStatus,
+  video: z.object({
+    url: z.string().url(),
+    id: z.string(),
+    title: z.string(),
+    channel: z.string(),
+    uploadDate: isoDate.optional(),
+  }),
+  transcript: z.object({
+    source: z.enum(["youtube-captions", "youtube-auto-captions", "manual"]),
+    chars: z.number().int().positive(),
+    transcribedAt: isoDateTime,
+  }),
+  model: z.string(),
+  summary: z.array(z.string()).length(3),
+  outline: z.array(z.object({ at: timestamp, heading: z.string(), point: z.string() })).min(3),
+  insights: z.array(z.object({ title: z.string(), body: z.string(), at: timestamp.optional() })).min(2),
+  crossReferences: z.array(z.object({ ref: z.string(), note: z.string() })),
+  applications: z.array(z.string()).min(1),
+  prayer: z.string(),
+  caveats: z.array(z.string()),
+});
+export type SermonNote = z.infer<typeof SermonNote>;

@@ -39,7 +39,7 @@ test.describe("콘텐츠 정확성", () => {
       await expect(page.getByRole("heading", { level: 1 })).toHaveText(c.title);
       await expect(page.getByText(c.ref).first()).toBeVisible();
       // 설교 요약은 검증 전 게시하지 않는다
-      await expect(page.getByText("설교 요약은 공식 설교 영상·원문을 확인한 뒤 게시합니다.")).toBeVisible();
+      await expect(page.getByText("설교 요약은 공식 설교 영상을 전사·정리한 뒤 게시합니다.")).toBeVisible();
     });
   }
 

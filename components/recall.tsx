@@ -19,7 +19,7 @@ function RecallRow({ index, prompt, answer }: { index: number; prompt: string; a
   const [open, setOpen] = useState(false);
   const id = useId();
   return (
-    <li className="grid grid-cols-[2.5rem_1fr] gap-x-4 py-7 md:grid-cols-[4rem_1fr]">
+    <li data-reveal className="grid grid-cols-[2.5rem_1fr] gap-x-4 py-7 md:grid-cols-[4rem_1fr]">
       <span className="numeral pt-0.5 text-lg text-stone-deep">{String(index).padStart(2, "0")}</span>
       <div>
         <p className="display-ko text-[1.125rem] leading-8">{prompt}</p>
@@ -44,7 +44,7 @@ function RecallRow({ index, prompt, answer }: { index: number; prompt: string; a
 /** 본문과 해석 구별하기 */
 export function Distinguish({ items }: { items: Study["distinguish"] }) {
   return (
-    <ul className="grid gap-px overflow-hidden border border-rule bg-rule md:grid-cols-2">
+    <ul className="grid border-t border-l border-rule md:grid-cols-2">
       {items.map((item) => (
         <DistinguishCard key={item.statement} {...item} />
       ))}
@@ -57,7 +57,7 @@ function DistinguishCard({ statement, kind, why }: Study["distinguish"][number])
   const correct = pick === kind;
   const label = kind === "text" ? "본문이 직접 말함" : "해석·적용";
   return (
-    <li className="flex flex-col bg-paper p-6 md:p-8">
+    <li data-reveal className="flex flex-col border-r border-b border-rule bg-paper p-6 md:p-8">
       <p className="font-serif text-[1.0625rem] leading-8">“{statement}”</p>
       <div className="mt-auto pt-6" role="group" aria-label="본문인지 해석인지 고르기">
         <div className="flex gap-2">

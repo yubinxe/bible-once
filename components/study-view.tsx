@@ -16,12 +16,12 @@ export const STUDY_TOC = [
 
 function Block({ id, n, eyebrow, title, children }: { id: string; n: string; eyebrow: string; title: string; children: React.ReactNode }) {
   return (
-    <section id={id} data-reveal aria-labelledby={`${id}-h`} className="scroll-mt-28 border-t border-rule py-16 md:py-20">
-      <p className="eyebrow text-burgundy">
+    <section id={id} aria-labelledby={`${id}-h`} className="scroll-mt-28 border-t border-rule py-16 md:py-20">
+      <p data-reveal className="eyebrow text-burgundy">
         <span className="numeral mr-3 tracking-normal">{n}</span>
         {eyebrow}
       </p>
-      <h2 id={`${id}-h`} className="display-ko mt-4 text-[length:var(--text-h2)]">
+      <h2 data-reveal id={`${id}-h`} className="display-ko mt-4 text-[length:var(--text-h2)]">
         {title}
       </h2>
       <div className="mt-10">{children}</div>
@@ -34,7 +34,7 @@ export function StudyView({ sermon, study }: { sermon: Sermon; study: Study }) {
     <div>
       <Block id="scripture" n="01" eyebrow="Scripture" title={passageLabel(sermon.passage)}>
         {study.keyVerse ? (
-          <figure className="relative">
+          <figure data-reveal className="relative">
             <span aria-hidden className="absolute -left-1 -top-10 font-display text-[6rem] leading-none text-gold/50 md:-left-12">
               “
             </span>
@@ -55,7 +55,7 @@ export function StudyView({ sermon, study }: { sermon: Sermon; study: Study }) {
       <Block id="plain" n="02" eyebrow="Layer 1 · Plain Understanding" title="쉬운 말로 다시 읽기">
         <ol className="space-y-6">
           {study.plain.map((p, i) => (
-            <li key={p} className="grid grid-cols-[2rem_1fr] gap-3">
+            <li key={p} data-reveal className="grid grid-cols-[2rem_1fr] gap-3">
               <span className="numeral pt-1 text-stone-deep">{i + 1}</span>
               <p className="font-serif text-[1.125rem] leading-[1.9]">{p}</p>
             </li>
@@ -66,7 +66,7 @@ export function StudyView({ sermon, study }: { sermon: Sermon; study: Study }) {
       <Block id="context" n="03" eyebrow="Layer 2 · Contextual Understanding" title="이 본문이 놓인 자리">
         <dl className="divide-y divide-rule border-y border-rule">
           {study.context.map((c) => (
-            <div key={c.label} className="grid gap-2 py-6 md:grid-cols-[10rem_1fr] md:gap-8">
+            <div key={c.label} data-reveal className="grid gap-2 py-6 md:grid-cols-[10rem_1fr] md:gap-8">
               <dt className="font-serif text-burgundy">{c.label}</dt>
               <dd className="text-[0.9875rem] leading-8">{c.body}</dd>
             </div>
@@ -82,7 +82,7 @@ export function StudyView({ sermon, study }: { sermon: Sermon; study: Study }) {
         <p className="caption -mt-4 mb-8">아래는 본문 자체가 아니라 본문에 대한 해석입니다.</p>
         <div className="grid gap-10 md:grid-cols-2">
           {study.theology.map((t) => (
-            <div key={t.label} className="border-t border-ink pt-5">
+            <div key={t.label} data-reveal className="border-t border-ink pt-5">
               <h3 className="display-ko text-[1.1875rem]">{t.label}</h3>
               <p className="mt-3 text-[0.9875rem] leading-8 text-ink/90">{t.body}</p>
             </div>
@@ -104,7 +104,7 @@ export function StudyView({ sermon, study }: { sermon: Sermon; study: Study }) {
       </Block>
 
       <Block id="prayer" n="07" eyebrow="Prayer & Practice" title="말씀을 기도로">
-        <p className="scripture max-w-[40rem]">{study.prayer}</p>
+        <p data-reveal className="scripture max-w-[40rem]">{study.prayer}</p>
         <div className="mt-12 border-l-2 border-burgundy pl-5">
           <p className="eyebrow text-[0.6875rem] text-burgundy">This Week</p>
           <p className="mt-2 text-[1.0625rem] leading-8">{study.practice}</p>

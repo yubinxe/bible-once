@@ -3,6 +3,7 @@
 ```
 Source Layer        content/sources.ts  ←  scripts/sync-sources.ts  ←  .github/workflows/sync-sources.yml
    (출처·메타)                               Discovery→Fetch→Parse→Normalize→Validate→(사람)Publish
+Note Pipeline       YouTube 자막(yt-dlp) → scripts/transcribe.ts → Claude 구조화 출력 → content/sermon-notes/*.json  ←  .github/workflows/transcribe.yml
 Content Layer       content/event.ts · content/sermons.ts   ⇐ lib/schema.ts (zod)   ⇐ scripts/validate-content.ts
    (검증된 데이터·해설)
 Presentation Layer  app/ (Next.js App Router, RSC)  ·  components/  ·  lib/content.ts(조회·포맷)

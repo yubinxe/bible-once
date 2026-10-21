@@ -20,14 +20,14 @@ export function SectionHead({
 }) {
   const muted = tone === "dark" ? "text-sand/75" : "text-stone-deep";
   return (
-    <header data-reveal className="grid gap-6 md:grid-cols-12">
-      <div className="md:col-span-3">
+    <header className="grid gap-6 md:grid-cols-12">
+      <div data-reveal className="md:col-span-3">
         <p className={`eyebrow ${tone === "dark" ? "text-gold" : "text-burgundy"}`}>
           {index && <span className="mr-3 numeral tracking-normal">{index}</span>}
           {eyebrow}
         </p>
       </div>
-      <div className="md:col-span-8">
+      <div data-reveal className="md:col-span-8">
         <h2 id={id} className="display-ko text-[length:var(--text-h2)]">
           {title}
         </h2>

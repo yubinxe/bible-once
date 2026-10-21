@@ -2,7 +2,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ReadingProgress } from "@/components/reading-progress";
+import { SermonNoteView } from "@/components/sermon-note";
 import { STUDY_TOC, StudyView } from "@/components/study-view";
+import { sermonNotes } from "@/content/sermon-notes";
 import { Awaiting, TextLink, VStatus } from "@/components/ui";
 import { sermonById, sermons } from "@/content/sermons";
 import { bibleUrl, dayByDateSafe, formatDate, passageLabel, speakerById } from "@/lib/content";
@@ -24,6 +26,8 @@ export default async function SermonPage({ params }: Props) {
   if (!sermon) notFound();
   const sp = speakerById(sermon.speakerId);
   const day = dayByDateSafe(sermon.date);
+  const note = sermonNotes[sermon.id];
+  const toc = note ? [{ id: "notes", label: "설교 노트" }, ...STUDY_TOC] : STUDY_TOC;
 
   return (
     <article>
@@ -69,7 +73,7 @@ export default async function SermonPage({ params }: Props) {
           <nav aria-label="이 페이지의 순서" className="sticky top-28">
             <p className="eyebrow text-[0.6875rem] text-stone-deep">Contents</p>
             <ol className="mt-5 space-y-3 text-[0.9375rem]">
-              {STUDY_TOC.map((t, i) => (
+              {toc.map((t, i) => (
                 <li key={t.id}>
                   <a href={`#${t.id}`} className="group flex gap-3 text-ink/70 hover:text-ink">
                     <span className="numeral text-stone-deep">{String(i + 1).padStart(2, "0")}</span>
@@ -82,6 +86,9 @@ export default async function SermonPage({ params }: Props) {
         </aside>
 
         <div className="md:col-span-9 lg:col-span-8">
+          {note ? (
+            <SermonNoteView note={note} />
+          ) : (
           <section aria-labelledby="summary-h" className="pb-16">
             <p id="summary-h" className="eyebrow text-[0.6875rem] text-stone-deep">Editor&apos;s Summary · 설교 요약</p>
             {sermon.editorSummary ? (
@@ -92,10 +99,11 @@ export default async function SermonPage({ params }: Props) {
               </ul>
             ) : (
               <div className="mt-4">
-                <Awaiting>설교 요약은 공식 설교 영상·원문을 확인한 뒤 게시합니다.</Awaiting>
+                <Awaiting>설교 요약은 공식 설교 영상을 전사·정리한 뒤 게시합니다.</Awaiting>
               </div>
             )}
           </section>
+          )}
 
           {sermon.study ? (
             <StudyView sermon={sermon} study={sermon.study} />
