@@ -33,4 +33,5 @@ docs/PRODUCT · SOURCE_REGISTRY · DESIGN_SYSTEM · CONTENT_GUIDELINES · ARCHIT
 - 프로젝트 `bible-once`(prj_uhpLKOHXkt5I8MfHiYfzFsaoyZZG), 팀 `team_YcEQ5kSM2V6IFnmpMGAz5zd6`. Production 브랜치 `main`, PR마다 Preview 자동 생성.
 - Vercel MCP는 `teamId` 없이 호출해야 결과가 나온다(teamId 지정 시 빈 목록). 권한 오류 시 `authorize_team_access` 링크를 사용자에게 전달.
 - 이 개발 환경은 `*.vercel.app`·`api.vercel.com` 접속이 막혀 있다. 배포 결과 확인은 PR의 Vercel 체크·봇 댓글로 한다.
+- 알림 최소화: `vercel.json`의 `github.silent`로 PR 봇 댓글을 끈다. 예약 워크플로는 시크릿이 없으면 실패 대신 건너뛴다(실패 메일 방지).
 - MCP의 배포 파일 내용 조회는 약 3,000자에서 잘린다. 소스 백업·이전에 쓰지 말 것(`VERCEL_TOKEN` + `api.vercel.com` 허용 필요).

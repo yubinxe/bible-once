@@ -41,18 +41,26 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+      # 시크릿이 없으면 실패 메일을 보내지 않고 조용히 건너뛴다
+      - name: Check secrets
+        id: check
+        run: |
+          if [ -z "$ANTHROPIC_API_KEY" ]; then
+            echo "::notice::ANTHROPIC_API_KEY 미등록 — 전사를 건너뜁니다."
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          fi
       # 최신 yt-dlp는 YouTube 처리에 외부 JS 런타임(Deno)을 쓴다
       - uses: denoland/setup-deno@v2
+        if: steps.check.outputs.ready == 'true'
         with:
           deno-version: v2.x
       - name: Install yt-dlp
+        if: steps.check.outputs.ready == 'true'
         run: python3 -m pip install --user "yt-dlp[default]==2026.8.19" && echo "$HOME/.local/bin" >> "$GITHUB_PATH"
-      - name: Check secrets
-        run: |
-          if [ -z "$ANTHROPIC_API_KEY" ]; then
-            echo "::error::ANTHROPIC_API_KEY 시크릿이 없습니다 (Settings → Secrets and variables → Actions)."; exit 1
-          fi
       - name: YouTube cookies (optional)
+        if: steps.check.outputs.ready == 'true'
         env:
           YTDLP_COOKIES: ${{ secrets.YTDLP_COOKIES }}
         run: |
@@ -61,6 +69,7 @@ jobs:
             echo "YTDLP_COOKIES_FILE=$RUNNER_TEMP/cookies.txt" >> "$GITHUB_ENV"
           fi
       - name: Transcribe and analyze
+        if: steps.check.outputs.ready == 'true'
         run: |
           args=()
           [ -n "${{ inputs.id }}" ] && args+=("--id=${{ inputs.id }}")
@@ -68,8 +77,10 @@ jobs:
           [ "${{ inputs.force }}" = "true" ] && args+=("--force")
           npm run transcribe -- "${args[@]}"
       - name: Verify
+        if: steps.check.outputs.ready == 'true'
         run: npm run typecheck && npm run lint && npm run validate:content && npm run build
       - name: Commit notes
+        if: steps.check.outputs.ready == 'true'
         run: |
           git add content/sermon-notes
           if git diff --cached --quiet; then echo "새 노트 없음"; exit 0; fi
