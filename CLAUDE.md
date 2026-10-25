@@ -28,3 +28,9 @@ docs/PRODUCT · SOURCE_REGISTRY · DESIGN_SYSTEM · CONTENT_GUIDELINES · ARCHIT
 - 최종 보고 형식(해당 없는 항목 생략): 결론(완료·일부 완료·보류) / 검증(통과·미검증) / 위험 / 다음 행동(사용자 몫만) / 링크.
 - 명확히 지시된 작업은 자율 구현·검증. 기존 코드 먼저 확인. 추측을 사실로 보고하지 않는다.
 - PR 병합·운영 배포: 사용자 상시 승인(2026-10-20). CI 통과 확인 후 묻지 말고 바로 병합한다.
+
+## Vercel 운영 메모
+- 프로젝트 `bible-once`(prj_uhpLKOHXkt5I8MfHiYfzFsaoyZZG), 팀 `team_YcEQ5kSM2V6IFnmpMGAz5zd6`. Production 브랜치 `main`, PR마다 Preview 자동 생성.
+- Vercel MCP는 `teamId` 없이 호출해야 결과가 나온다(teamId 지정 시 빈 목록). 권한 오류 시 `authorize_team_access` 링크를 사용자에게 전달.
+- 이 개발 환경은 `*.vercel.app`·`api.vercel.com` 접속이 막혀 있다. 배포 결과 확인은 PR의 Vercel 체크·봇 댓글로 한다.
+- MCP의 배포 파일 내용 조회는 약 3,000자에서 잘린다. 소스 백업·이전에 쓰지 말 것(`VERCEL_TOKEN` + `api.vercel.com` 허용 필요).
